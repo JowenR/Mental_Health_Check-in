@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In</title>
+  <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+<body class="min-h-screen bg-white">
+  <main class="grid min-h-screen w-full grid-cols-1 md:grid-cols-2">
+    
+    <section
+        class="login-bg relative hidden flex-col items-center justify-center bg-cover bg-center px-8 py-12 text-center text-white md:flex">
+      <div class="absolute inset-0 bg-navy/40"></div>
+
+      <div class="relative z-10 flex flex-col items-center">
+
+        <!-- logo inside a white circle -->
+        <div class="flex h-64 w-64 items-center justify-center rounded-full bg-white shadow-lg">
+          <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-4/5 w-4/5 object-contain">
+        </div>
+
+        <h1 class="mt-10 font-serif text-4xl font-bold uppercase tracking-wide drop-shadow-md">
+         Mental Health<br>Check-In
+        </h1>
+        <p class="mt-4 max-w-[20rem] font-serif text-3xl drop-shadow-md">Your mind matters.</p>
+
+        <p class="mt-6 max-w-[16rem] font-serif text-lg italic leading-snug drop-shadow-md">
+          Check in. Get support. Take the next step.
+        </p>
+      </div>
+    </section>
+       
+    <section class="flex items-center justify-center px-6 py-12 sm:px-12">
+      <div class="w-full max-w-md">
+
+        <h2 class="font-serif text-3xl font-bold text-ink">Welcome Back</h2>
+        <p class="mt-3 font-form text-sm text-ink">Log in to your account</p>
+
+        {% if form.errors %}
+          <div class="mt-4 rounded-lg border border-red-300 bg-red-50 px-4 py-3 font-form text-sm text-red-700">
+            Invalid email / student ID or password.
+          </div>
+        {% endif %}
+
+        <form method="post" class="mt-6 space-y-6">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ next }}">
+
+          <input
+            type="text"
+            name="username"
+            placeholder="Email or Student ID"
+            required
+            autofocus
+            class="h-14 w-full rounded-xl border border-ink px-4 font-form text-sm text-ink placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-navy">
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            class="h-14 w-full rounded-xl border border-ink px-4 font-form text-sm text-ink placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-navy">
+
+          <button
+            type="submit"
+            class="h-10 w-full rounded-lg bg-navy font-form text-sm text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-navy focus:ring-offset-2">
+            Log In
+          </button>
+        </form>
+
+        <div class="mt-8 text-center">
+          <a href="#" class="border-b border-ink font-form text-xs text-ink hover:opacity-70">
+            Forgot Password?
+          </a>
+        </div>
+
+        <div class="mt-20 text-center">
+          <p class="font-form text-sm font-bold text-ink">Don't have an account?</p>
+          <a href="#" class="mt-3 inline-block border-b border-ink font-form text-sm text-ink hover:opacity-70">
+            Sign Up
+          </a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+</body>
+</html>

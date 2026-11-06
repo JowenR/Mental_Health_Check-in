@@ -10,10 +10,20 @@
   --color-active: #dfe8f7;
   --font-sans: "Arimo", sans-serif;
   --font-serif: "Markazi Text", serif;
+  --font-form: ui-monospace, "Cascadia Code", Consolas, "Courier New", monospace;
+}
+@font-face {
+  font-family: "Space Mono";
+  src: url("../fonts/space-mono-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
 }
 @font-face {
   font-family: "Lora";
   src: url("../fonts/lora-700.woff2") format("woff2");
   font-weight: 700;
   font-display: swap;
+}
+.login-bg {
+  background-image: url("../images/background.png");
 }
