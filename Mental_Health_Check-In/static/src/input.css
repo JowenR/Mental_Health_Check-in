@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@source "../../templates";
+@source "../../apps";
+
+@theme {
+  --color-navy: #2e3a8f;
+  --color-ink: #25285e;
+  --color-sidebar: #f5f9fd;
+  --color-active: #dfe8f7;
+  --font-sans: "Arimo", sans-serif;
+  --font-serif: "Markazi Text", serif;
+}
+@font-face {
+  font-family: "Lora";
+  src: url("../fonts/lora-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}

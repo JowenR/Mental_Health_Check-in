@@ -1,0 +1,9 @@
+<nav aria-label="Main navigation" class="flex flex-col gap-1.5 px-3.5 py-6">
+  {% for item in sidebar_links %}
+    <a href="{{ item.href }}"
+       {% if item.active %}aria-current="page"{% endif %}
+       class="flex items-center gap-4 rounded-lg px-4 py-3 text-xl transition hover:bg-navy/10 {% if item.active %}bg-active{% endif %}">
+      <i class="bi {{ item.icon }} w-6 text-center text-xl"></i>
+      <span>{{ item.label }}</span>
+    </a>
+  {% endfor %}
