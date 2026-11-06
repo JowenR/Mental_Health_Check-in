@@ -1,0 +1,45 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block auth_content %}
+<h2 class="mb-6 text-3xl font-semibold text-ink">Create Account</h2>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+
+  <div class="mb-5">
+    {{ form.identifier }}
+    {% for error in form.identifier.errors %}
+      <p class="mt-1.5 text-xs text-red-600">{{ error }}</p>
+    {% endfor %}
+  </div>
+
+  <div class="mb-5">
+    {{ form.password }}
+    {% for error in form.password.errors %}
+      <p class="mt-1.5 text-xs text-red-600">{{ error }}</p>
+    {% endfor %}
+  </div>
+
+  <div class="mb-5">
+    {{ form.confirm_password }}
+    {% for error in form.confirm_password.errors %}
+      <p class="mt-1.5 text-xs text-red-600">{{ error }}</p>
+    {% endfor %}
+  </div>
+
+  <button type="submit"
+    class="h-10 w-full rounded-lg bg-[#2e3a93] font-form text-sm text-white transition hover:bg-[#232d78]">
+    Create Account
+  </button>
+</form>
+
+<div class="mt-9 text-center">
+  <p class="font-form text-sm font-bold text-ink">Already Have An Account?</p>
+  <a href="{% url 'login' %}"
+     class="mt-0.5 inline-block border-b border-ink font-form text-sm text-ink hover:opacity-70">
+    Log In
+  </a>
+</div>
+{% endblock %}

@@ -2,6 +2,7 @@
 
 @source "../../templates";
 @source "../../apps";
+@source "../../apps/**/*.py";
 
 @theme {
   --color-navy: #2e3a8f;

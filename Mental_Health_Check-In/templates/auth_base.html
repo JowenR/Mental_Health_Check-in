@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Mental Health Check-In{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+<body class="min-h-screen bg-white">
+  <main class="grid min-h-screen grid-cols-1 md:grid-cols-2">
+
+    <section
+        class="login-bg relative hidden flex-col items-center justify-center bg-cover bg-center px-8 py-12 text-center text-white md:flex">
+      <div class="absolute inset-0 bg-navy/40"></div>
+
+      <div class="relative z-10 flex flex-col items-center">
+
+        <!-- logo inside a white circle -->
+        <div class="flex h-64 w-64 items-center justify-center rounded-full bg-white shadow-lg">
+          <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-4/5 w-4/5 object-contain">
+        </div>
+
+        <h1 class="mt-10 font-serif text-4xl font-bold uppercase tracking-wide drop-shadow-md">
+         Mental Health<br>Check-In
+        </h1>
+        <p class="mt-4 max-w-[20rem] font-serif text-3xl drop-shadow-md">Your mind matters.</p>
+
+        <p class="mt-6 max-w-[16rem] font-serif text-lg italic leading-snug drop-shadow-md">
+          Check in. Get support. Take the next step.
+        </p>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL (each page fills this) -->
+    <section class="flex items-center justify-center p-10">
+      <div class="w-full max-w-[345px]">
+        {% block auth_content %}{% endblock %}
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

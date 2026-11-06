@@ -39,12 +39,15 @@
     </a>
   </nav>
 
-  <!-- Log out -->
   <div class="px-3.5 pb-7" style="margin-top:auto">
-    <a href="#" class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10">
-      <img src="{% static 'icons/logoutbutton.svg' %}" alt="" class="w-6 h-6">
-      <span>Log Out</span>
-    </a>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit"
+        class="flex w-full items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10">
+        <img src="{% static 'icons/logoutbutton.svg' %}" alt="" class="w-6 h-6">
+        <span>Log Out</span>
+      </button>
+    </form>
   </div>
 
 </aside>
