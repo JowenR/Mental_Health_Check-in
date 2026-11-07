@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1 class="text-3xl font-bold">Good Morning!</h1>
+<h1 class="text-3xl font-semibold text-ink">
+  Good Day, {% firstof user.first_name user.username %}!
+</h1>
+<p class="text-lg text-ink">Take a moment to check in with yourself.</p>
 {% endblock %}

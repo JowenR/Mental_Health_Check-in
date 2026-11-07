@@ -9,6 +9,14 @@
   {% csrf_token %}
 
   <div class="mb-5">
+    {{ form.name }}
+    {% for error in form.name.errors %}
+      <p class="mt-1.5 text-xs text-red-600">{{ error }}</p>
+    {% endfor %}
+  </div>
+
+
+  <div class="mb-5">
     {{ form.identifier }}
     {% for error in form.identifier.errors %}
       <p class="mt-1.5 text-xs text-red-600">{{ error }}</p>

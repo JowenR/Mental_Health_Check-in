@@ -11,8 +11,9 @@
   --color-active: #dfe8f7;
   --font-sans: "Arimo", sans-serif;
   --font-serif: "Markazi Text", serif;
-  --font-form: ui-monospace, "Cascadia Code", Consolas, "Courier New", monospace;
+  --font-form: "Space Mono", monospace;
 }
+
 @font-face {
   font-family: "Space Mono";
   src: url("../fonts/space-mono-latin-400-normal.woff2") format("woff2");

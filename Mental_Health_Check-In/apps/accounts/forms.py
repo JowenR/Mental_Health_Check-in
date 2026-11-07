@@ -3,20 +3,24 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.forms import AuthenticationForm
 
-
 INPUT_CLASSES = (
     "w-full h-[50px] px-[18px] rounded-[10px] border-[1.5px] border-ink "
     "font-form text-sm text-ink placeholder:text-ink/60 "
     "focus:outline-none focus:ring-4 focus:ring-indigo-800/20"
 )
-
-
-
 class SignUpForm(forms.Form):
+    name = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            "placeholder": "Enter your name",
+            "class": INPUT_CLASSES,
+            "autocomplete": "name",
+        }),
+    )
     identifier = forms.CharField(
         max_length=150,
         widget=forms.TextInput(attrs={
-            "placeholder": "Email or Student ID",
+            "placeholder": "Enter your email or student number",
             "class": INPUT_CLASSES,
             "autocomplete": "username",
         }),
@@ -41,6 +45,9 @@ class SignUpForm(forms.Form):
         if User.objects.filter(username__iexact=value).exists():
             raise forms.ValidationError("This account already exists.")
         return value
+
+    def clean_name(self):
+        return " ".join(self.cleaned_data["name"].split())
 
     def clean(self):
         cleaned = super().clean()
