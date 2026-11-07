@@ -17,12 +17,19 @@ class SignUpForm(forms.Form):
             "autocomplete": "name",
         }),
     )
-    identifier = forms.CharField(
+    student_id = forms.CharField(
         max_length=150,
         widget=forms.TextInput(attrs={
-            "placeholder": "Enter your email or student number",
+            "placeholder": "Enter your Student ID",
             "class": INPUT_CLASSES,
-            "autocomplete": "username",
+            "autocomplete": "off",
+        }),
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            "placeholder": "Enter your Email",
+            "class": INPUT_CLASSES,
+            "autocomplete": "email",
         }),
     )
     password = forms.CharField(
@@ -40,14 +47,20 @@ class SignUpForm(forms.Form):
         }),
     )
 
-    def clean_identifier(self):
-        value = self.cleaned_data["identifier"].strip().lower()
-        if User.objects.filter(username__iexact=value).exists():
-            raise forms.ValidationError("This account already exists.")
-        return value
-
     def clean_name(self):
         return " ".join(self.cleaned_data["name"].split())
+
+    def clean_student_id(self):
+        value = self.cleaned_data["student_id"].strip().lower()
+        if User.objects.filter(username__iexact=value).exists():
+            raise forms.ValidationError("This Student ID is already registered.")
+        return value
+
+    def clean_email(self):
+        value = self.cleaned_data["email"].strip().lower()
+        if User.objects.filter(email__iexact=value).exists():
+            raise forms.ValidationError("This email is already registered.")
+        return value
 
     def clean(self):
         cleaned = super().clean()

@@ -30,10 +30,9 @@ def signup(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            identifier = form.cleaned_data["identifier"]
             user = User.objects.create_user(
-                username=identifier,
-                email=identifier if "@" in identifier else "",
+                username=form.cleaned_data["student_id"],
+                email=form.cleaned_data["email"],
                 password=form.cleaned_data["password"],
                 first_name=form.cleaned_data["name"],
             )

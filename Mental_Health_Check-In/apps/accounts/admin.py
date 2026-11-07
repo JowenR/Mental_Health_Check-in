@@ -9,8 +9,19 @@ admin.site.unregister(User)
 
 @admin.register(Student)
 class StudentAdmin(UserAdmin):
-    list_display = ("username", "first_name", "email", "is_active", "date_joined")
-    list_filter = ("is_active",)
+    list_display = ("student_name", "student_id", "email")
+    list_display_links = ("student_name",)
+    search_fields = ("first_name", "username", "email")
+    list_filter = ()
+    ordering = ("first_name",)
+
+    @admin.display(description="Name", ordering="first_name")
+    def student_name(self, obj):
+        return obj.first_name or "-"
+
+    @admin.display(description="Student ID", ordering="username")
+    def student_id(self, obj):
+        return obj.username
 
     def get_queryset(self, request):
         return super().get_queryset(request).filter(is_staff=False)
