@@ -1,7 +1,5 @@
-{% extends "auth_base.html" %}
-
+{% extends "layouts/auth_base.html" %}
 {% block title %}Log In{% endblock %}
-
 {% block auth_content %}
 <h2 class="mb-6 text-3xl font-semibold text-ink">Welcome</h2>
 <p class="mt-3 font-form text-sm text-ink">Log in to your account</p>
@@ -39,7 +37,7 @@
 </form>
 
 <div class="mt-8 text-center">
-  <a href="#" class="border-b border-ink font-form text-xs text-ink hover:opacity-70">
+  <a href="{% url 'password_reset' %}" class="border-b border-ink font-form text-sm text-ink hover:opacity-70">
     Forgot Password?
   </a>
 </div>

@@ -8,7 +8,7 @@ from .forms import LoginForm, SignUpForm
 
 
 class RoleLoginView(auth_views.LoginView):
-    template_name = "login.html"
+    template_name = "accounts/login.html"
     authentication_form = LoginForm
     redirect_authenticated_user = True
 
@@ -41,4 +41,4 @@ def signup(request):
     else:
         form = SignUpForm()
 
-    return render(request, "signup.html", {"form": form})
+    return render(request, "accounts/signup.html", {"form": form})
