@@ -1,12 +1,12 @@
 {% load static %}
 {% with current=request.resolver_match.url_name %}
-<aside class="sticky top-0 flex h-screen w-[246px] shrink-0 flex-col bg-sidebar" style="display:flex;flex-direction:column;height:100vh">
+<aside class="sticky top-0 flex h-screen w-[280px] shrink-0 flex-col bg-sidebar" style="display:flex;flex-direction:column;height:100vh">
 
   <!-- Brand header -->
-  <div class="flex items-center gap-5 rounded-br-2xl bg-navy p-5 text-white">
+  <div class="flex items-center gap-5 rounded-br-2xl bg-navy p-6 text-white">
     <img src="{% static 'images/logo.png' %}" alt="Logo"
-         class="size-14 rounded-full bg-white object-cover">
-    <span class="text-center font-serif text-base leading-normal font-bold">
+        class="size-16 rounded-full bg-white object-cover">
+    <span class="text-center font-serif text-lg leading-normal font-bold">
       Mental Health<br>Check-In
     </span>
   </div>
@@ -14,27 +14,27 @@
   <!-- Navigation -->
   <nav class="flex flex-col gap-1.5 px-3.5 py-6">
     <a href="{% url 'home' %}"
-       class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10 {% if current == 'home' %}bg-active{% endif %}">
-      <img src="{% static 'icons/home.svg' %}" alt="" class="h-6 w-6 shrink-0"><span>Home</span>
+      class="flex items-center gap-4 rounded-lg px-4 py-3.5 text-xl transition hover:bg-navy/10 {% if current == 'home' %}bg-active{% endif %}">
+      <img src="{% static 'icons/home.svg' %}" alt="" class="h-7 w-7 shrink-0"><span>Home</span>
     </a>
 
     <a href="#"
-       class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10 {% if current == 'check_in' %}bg-active{% endif %}">
+      class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10 {% if current == 'check_in' %}bg-active{% endif %}">
       <img src="{% static 'icons/check_in.svg' %}" alt="" class="h-6 w-6 shrink-0"><span>Check In</span>
     </a>
 
     <a href="#"
-       class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10 {% if current == 'appointments' %}bg-active{% endif %}">
+      class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10 {% if current == 'appointments' %}bg-active{% endif %}">
       <img src="{% static 'icons/appointment.svg' %}" alt="" class="h-6 w-6 shrink-0"><span>Appointments</span>
     </a>
 
     <a href="#"
-       class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10 {% if current == 'resources' %}bg-active{% endif %}">
+      class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10 {% if current == 'resources' %}bg-active{% endif %}">
       <img src="{% static 'icons/resources.svg' %}" alt="" class="h-6 w-6 shrink-0"><span>Resources</span>
     </a>
 
-    <a href="#"
-       class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10 {% if current == 'profile' %}bg-active{% endif %}">
+    <a href="{% url 'student_profile' %}"
+      class="flex items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10 {% if '/student/profile' in request.path %} bg-active{% endif %}">
       <img src="{% static 'icons/profile.svg' %}" alt="" class="h-6 w-6 shrink-0"><span>Profile</span>
     </a>
   </nav>
@@ -44,9 +44,10 @@
       {% csrf_token %}
       <button type="submit"
         class="flex w-full items-center gap-4 rounded-lg px-4 py-3 text-lg transition hover:bg-navy/10">
-        <img src="{% static 'icons/logoutbutton.svg' %}" alt="" class="w-6 h-6">
+        <img src="{% static 'icons/logoutbutton.svg' %}" alt="" class="w-7 h-7">
         <span>Log Out</span>
       </button>
+      
     </form>
   </div>
 

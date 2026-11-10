@@ -1,0 +1,78 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="pl-[62px]">
+
+  <div class="flex h-[20px] items-center">
+    <h1 class="text-[29px] font-bold leading-none text-[#26205F]">My Profile</h1>
+  </div>
+
+  <div class="mt-[75px]">
+    <h2 class="text-[34px] font-bold leading-[40px] text-[#26205F]">{{ user.first_name }}</h2>
+    <p class="mt-[4px] text-[24px] italic leading-[28px] text-[#26205F]">Student</p>
+  </div>
+
+
+  <form method="post" id="profileForm">
+    {% csrf_token %}
+
+    <div class="mt-[33px] flex flex-col gap-[40px]">
+
+      <div class="flex items-center">
+        <label class="w-[157px] shrink-0 text-[24px] text-[#26205F]">Name</label>
+        <input type="text" name="name" value="{{ user.first_name }}" readonly data-editable
+          class="h-[66px] w-[431px] rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-[30px] text-[24px] italic text-[#26205F] focus:outline-none read-only:caret-transparent read-only:cursor-default [&:not([readonly])]:border-[#2E3892]">
+      </div>
+
+      <div class="flex items-center">
+        <label class="w-[157px] shrink-0 text-[24px] text-[#26205F]">Email</label>
+        <input type="email" name="email" value="{{ user.email }}" readonly data-editable
+          class="h-[66px] w-[431px] rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-[30px] text-[24px] italic text-[#26205F] focus:outline-none read-only:caret-transparent read-only:cursor-default [&:not([readonly])]:border-[#2E3892]">
+      </div>
+
+      <div class="flex items-center">
+        <label class="w-[157px] shrink-0 text-[24px] text-[#26205F]">Student ID</label>
+        <input type="text" name="student_id" value="{{ user.username }}" readonly data-editable
+          class="h-[66px] w-[431px] rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-[30px] text-[24px] italic text-[#26205F] focus:outline-none read-only:caret-transparent read-only:cursor-default">
+      </div>
+
+    </div>
+
+      <button type="submit" id="editBtn"
+      class="ml-[236px] mt-[41px] h-[62px] w-[286px] rounded-md bg-[#2E3892] text-[20px] font-bold uppercase text-white hover:bg-[#252d78]">
+      Edit Profile
+    </button>
+
+    </div>
+  </form>
+
+</div>
+
+{% if messages %}
+<div class="fixed right-6 top-6 z-50 flex flex-col gap-3">
+  {% for message in messages %}
+  <div role="alert"
+    class="toast flex w-[380px] -translate-y-3 items-center gap-3 rounded-lg border-l-4 bg-white px-5 py-4 opacity-0 shadow-xl transition duration-300 {% if message.tags == 'success' %}border-green-500{% else %}border-red-500{% endif %}">
+
+    {% if message.tags == 'success' %}
+    <svg class="h-7 w-7 shrink-0 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    </svg>
+    {% else %}
+    <svg class="h-7 w-7 shrink-0 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    </svg>
+    {% endif %}
+
+    <p class="flex-1 text-[16px] font-semibold text-[#26205F]">{{ message }}</p>
+
+    <button type="button" class="toast-close text-[24px] leading-none text-gray-400 hover:text-gray-600">&times;</button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+<script src="{% static 'js/students_profile.js' %}"></script>
+{% endblock %}

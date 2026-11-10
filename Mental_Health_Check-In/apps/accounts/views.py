@@ -3,8 +3,10 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.urls import reverse
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from .forms import LoginForm, SignUpForm
+from django.contrib import messages
 
 
 class RoleLoginView(auth_views.LoginView):
@@ -42,3 +44,23 @@ def signup(request):
         form = SignUpForm()
 
     return render(request, "accounts/signup.html", {"form": form})
+
+@login_required
+def students_profile(request):
+    if request.method == "POST":
+        user = request.user
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip()
+
+        if not name or not email:
+            messages.error(request, "Name and email cannot be empty.")
+        elif User.objects.filter(email__iexact=email).exclude(pk=user.pk).exists():
+            messages.error(request, "That email is already used by another account.")
+        else:
+            user.first_name = name
+            user.email = email
+            user.save()
+            messages.success(request, "Profile updated!")
+        return redirect(request.path)
+
+    return render(request, "accounts/students_profile.html")
