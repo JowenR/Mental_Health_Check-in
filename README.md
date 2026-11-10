@@ -48,9 +48,9 @@ pip install -r requirements.txt
 Copy `.env.example` to `.env` and fill in your own values:
 
 ```
-SECRET_KEY=
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
+DEBUG = True
+SECRET_KEY=scammo1(!xgng^4djpfg0eh@+tjrvc+(i49ru(u(vcji&04)@d
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 ```
 
 Never commit your real `.env` file or share its values.
