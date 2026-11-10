@@ -180,7 +180,11 @@ Check your `.env` values and make sure you are using a Gmail App Password.
 
 ## Team
 
-Savannah De Mesa
-John Mark De Villa
-Franz Jowen Rances
-Cielo Seco
+| Name | Role |
+|Savannah De Mesa|------|
+|John Mark De Villa|------|
+|Franz Jowen Rances|------|
+|Cielo Seco|------|
+
+
+
