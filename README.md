@@ -1,7 +1,5 @@
 # Mental_Health_Check-in
 
-# Mental Health Check-In
-
 A hybrid app that helps users record how they feel each day and reflect on their mood over time.
 
 > **Important:** This app is a self-reflection tool. It is **not** a medical device and does not give a diagnosis or replace a licensed professional. If you or someone you know is in crisis or in danger, contact local emergency services or a crisis hotline in your area right away: **Nationwide: 1553
