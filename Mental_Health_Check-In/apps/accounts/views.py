@@ -7,8 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .forms import LoginForm, SignUpForm
 from django.contrib import messages
-
-
 class RoleLoginView(auth_views.LoginView):
     template_name = "accounts/login.html"
     authentication_form = LoginForm
@@ -21,7 +19,6 @@ class RoleLoginView(auth_views.LoginView):
         if self.request.user.is_staff:
             return reverse("admin_home")
         return reverse("student_home")
-
 
 def signup(request):
     if request.user.is_authenticated:
@@ -64,3 +61,15 @@ def profile(request):
         return redirect(request.path)
 
     return render(request, "accounts/profile.html")
+MOODS = [
+    {"key": "great", "label": "Great", "img": "icons/great.svg", "color": "#22c55e"},
+    {"key": "good",  "label": "Good",  "img": "icons/good.svg",  "color": "#84cc16"},
+    {"key": "okay",  "label": "Okay",  "img": "icons/okay.svg",  "color": "#eab308"},
+    {"key": "bad",   "label": "Bad",   "img": "icons/bad.svg",   "color": "#f97316"},
+    {"key": "awful", "label": "Awful", "img": "icons/awful.svg", "color": "#ef4444"},
+]
+
+
+@login_required
+def student_home(request):
+    return render(request, "student_home.html", {"moods": MOODS})
