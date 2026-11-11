@@ -9,8 +9,8 @@
   </div>
 
   <div class="mt-[75px]">
-    <h2 class="text-[34px] font-bold leading-[40px] text-[#26205F]">{{ user.first_name }}</h2>
-    <p class="mt-[4px] text-[24px] italic leading-[28px] text-[#26205F]">Student</p>
+    <h2 class="text-[34px] font-bold leading-[40px] text-[#26205F]">{{ user.first_name|default:user.username }}</h2>eh
+    <p class="mt-[4px] text-[24px] italic leading-[28px] text-[#26205F]">{% if user.is_staff %}Admin{% else %}Student{% endif %}</p>
   </div>
 
 
@@ -32,7 +32,7 @@
       </div>
 
       <div class="flex items-center">
-        <label class="w-[157px] shrink-0 text-[24px] text-[#26205F]">Student ID</label>
+        <label class="w-[157px] shrink-0 text-[24px] text-[#26205F]">{% if user.is_staff %}Admin ID{% else %}Student ID{% endif %}</label>
         <input type="text" name="student_id" value="{{ user.username }}" readonly data-editable
           class="h-[66px] w-[431px] rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-[30px] text-[24px] italic text-[#26205F] focus:outline-none read-only:caret-transparent read-only:cursor-default">
       </div>

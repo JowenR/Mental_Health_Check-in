@@ -20,14 +20,14 @@ class RoleLoginView(auth_views.LoginView):
             return next_url
         if self.request.user.is_staff:
             return reverse("admin_home")
-        return reverse("home")
+        return reverse("student_home")
 
 
 def signup(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
             return redirect("admin_home")
-        return redirect("home")
+        return redirect("student_home")
 
     if request.method == "POST":
         form = SignUpForm(request.POST)
@@ -39,14 +39,14 @@ def signup(request):
                 first_name=form.cleaned_data["name"],
             )
             login(request, user)
-            return redirect("home")
+            return redirect("student_home")
     else:
         form = SignUpForm()
 
     return render(request, "accounts/signup.html", {"form": form})
 
 @login_required
-def students_profile(request):
+def profile(request):
     if request.method == "POST":
         user = request.user
         name = request.POST.get("name", "").strip()
@@ -63,4 +63,4 @@ def students_profile(request):
             messages.success(request, "Profile updated!")
         return redirect(request.path)
 
-    return render(request, "accounts/students_profile.html")
+    return render(request, "accounts/profile.html")
