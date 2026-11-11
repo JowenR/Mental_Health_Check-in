@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Mental Health Check-In{% endblock %}</title>
+  <title>{% block title %}Serenify{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/output.css' %}">
 </head>
 <body class="min-h-screen bg-white">
@@ -16,13 +16,12 @@
 
       <div class="relative z-10 flex flex-col items-center">
 
-        <!-- logo inside a white circle -->
         <div class="flex h-64 w-64 items-center justify-center rounded-full bg-white shadow-lg">
           <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-4/5 w-4/5 object-contain">
         </div>
 
         <h1 class="mt-10 font-serif text-4xl font-bold uppercase tracking-wide drop-shadow-md">
-        Mental Health<br>Check-In
+        Serenify
         </h1>
         <p class="mt-4 max-w-[20rem] font-serif text-3xl drop-shadow-md">Your mind matters.</p>
 
@@ -32,7 +31,6 @@
       </div>
     </section>
 
-    <!-- RIGHT PANEL (each page fills this) -->
     <section class="flex items-center justify-center p-10">
       <div class="w-full max-w-[345px]">
         {% block auth_content %}{% endblock %}

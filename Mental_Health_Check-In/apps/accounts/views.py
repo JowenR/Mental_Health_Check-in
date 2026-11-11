@@ -61,15 +61,25 @@ def profile(request):
         return redirect(request.path)
 
     return render(request, "accounts/profile.html")
+
 MOODS = [
-    {"key": "great", "label": "Great", "img": "icons/great.svg", "color": "#22c55e"},
-    {"key": "good",  "label": "Good",  "img": "icons/good.svg",  "color": "#84cc16"},
-    {"key": "okay",  "label": "Okay",  "img": "icons/okay.svg",  "color": "#eab308"},
-    {"key": "bad",   "label": "Bad",   "img": "icons/bad.svg",   "color": "#f97316"},
-    {"key": "awful", "label": "Awful", "img": "icons/awful.svg", "color": "#ef4444"},
+    {"key": "great", "label": "Great", "img": "icons/moods/great.svg", "color": "#22c55e"},
+    {"key": "good",  "label": "Good",  "img": "icons/moods/good.svg",  "color": "#84cc16"},
+    {"key": "okay",  "label": "Okay",  "img": "icons/moods/okay.svg",  "color": "#eab308"},
+    {"key": "bad",   "label": "Bad",   "img": "icons/moods/bad.svg",   "color": "#f97316"},
+    {"key": "awful", "label": "Awful", "img": "icons/moods/awful.svg", "color": "#ef4444"},
 ]
 
 
 @login_required
 def student_home(request):
-    return render(request, "student_home.html", {"moods": MOODS})
+    return render(request, "pages/students/student_home.html", {"moods": MOODS})
+
+def check_in(request):
+    return render(request, "pages/students/check_in.html")
+
+def appointments(request):
+    return render(request, "pages/students/appointments.html")
+
+def resources(request):
+    return render(request, "pages/students/resources.html")

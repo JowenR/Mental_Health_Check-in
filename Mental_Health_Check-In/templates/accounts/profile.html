@@ -2,14 +2,11 @@
 {% load static %}
 
 {% block content %}
-<div class="pl-[62px]">
+<div class="px-12 py-10 max-w-5xl">
+    <h1 class="text-3xl font-bold text-[#1f1f5c]">My Profile</h1>
 
-  <div class="flex h-[20px] items-center">
-    <h1 class="text-[29px] font-bold leading-none text-[#26205F]">My Profile</h1>
-  </div>
-
-  <div class="mt-[75px]">
-    <h2 class="text-[34px] font-bold leading-[40px] text-[#26205F]">{{ user.first_name|default:user.username }}</h2>eh
+  <div class="mt-[40px]">
+    <h2 class="text-[34px] font-bold leading-[40px] text-[#26205F]">{{ user.first_name|default:user.username }}</h2>
     <p class="mt-[4px] text-[24px] italic leading-[28px] text-[#26205F]">{% if user.is_staff %}Admin{% else %}Student{% endif %}</p>
   </div>
 

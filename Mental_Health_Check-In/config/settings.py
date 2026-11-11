@@ -50,7 +50,7 @@ else:
         }
     }
 
-DEFAULT_FROM_EMAIL = f"Mental Health Check-in <{os.environ.get('DEFAULT_FROM_EMAIL')}>"
+DEFAULT_FROM_EMAIL = f"Serenify <{os.environ.get('DEFAULT_FROM_EMAIL')}>"
 
 # Application definition
 

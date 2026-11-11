@@ -19,11 +19,15 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from apps.core.decorators import admin_required, student_required
-from apps.accounts.views import student_home
+from apps.accounts.views import appointments, resources, student_home
+from apps.accounts.views import student_home, check_in
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("student-home/", student_required(student_home), name="student_home"),
-    path("admin-panel/", admin_required(TemplateView.as_view(template_name="admin_home.html")), name="admin_home"),
+    path("check-in/", student_required(check_in), name="check_in"),
+    path("appointments/", student_required(appointments), name="appointments"),
+    path("resources/", student_required(resources), name="resources"),
+    path("admin-panel/", admin_required(TemplateView.as_view(template_name="pages/admin/admin_home.html")), name="admin_home"),
     path("", include("apps.accounts.urls")),
 ]

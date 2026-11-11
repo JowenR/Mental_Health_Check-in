@@ -298,11 +298,29 @@
   .mt-\[33px\] {
     margin-top: 33px;
   }
+  .mt-\[40px\] {
+    margin-top: 40px;
+  }
   .mt-\[41px\] {
     margin-top: 41px;
   }
+  .mt-\[50px\] {
+    margin-top: 50px;
+  }
+  .mt-\[60px\] {
+    margin-top: 60px;
+  }
+  .mt-\[70px\] {
+    margin-top: 70px;
+  }
   .mt-\[75px\] {
     margin-top: 75px;
+  }
+  .mt-\[90px\] {
+    margin-top: 90px;
+  }
+  .mt-\[px\] {
+    margin-top: px;
   }
   .mb-5 {
     margin-bottom: calc(var(--spacing) * 5);
@@ -544,6 +562,9 @@
   .border-gray-200 {
     border-color: var(--color-gray-200);
   }
+  .border-gray-300 {
+    border-color: var(--color-gray-300);
+  }
   .border-green-500 {
     border-color: var(--color-green-500);
   }
@@ -570,9 +591,6 @@
   }
   .bg-\[\#9797cd\] {
     background-color: #9797cd;
-  }
-  .bg-\[\#e3e8f7\] {
-    background-color: #e3e8f7;
   }
   .bg-active {
     background-color: var(--color-active);
@@ -634,9 +652,6 @@
   .p-10 {
     padding: calc(var(--spacing) * 10);
   }
-  .px-1 {
-    padding-inline: var(--spacing);
-  }
   .px-3 {
     padding-inline: calc(var(--spacing) * 3);
   }
@@ -672,9 +687,6 @@
   }
   .py-4 {
     padding-block: calc(var(--spacing) * 4);
-  }
-  .py-5 {
-    padding-block: calc(var(--spacing) * 5);
   }
   .py-6 {
     padding-block: calc(var(--spacing) * 6);
@@ -748,6 +760,9 @@
   .text-\[34px\] {
     font-size: 34px;
   }
+  .text-\[60px\] {
+    font-size: 60px;
+  }
   .leading-\[28px\] {
     --tw-leading: 28px;
     line-height: 28px;
@@ -786,6 +801,9 @@
   .text-\[\#26205F\] {
     color: #26205F;
   }
+  .text-\[px\] {
+    color: px;
+  }
   .text-gray-400 {
     color: var(--color-gray-400);
   }
@@ -821,6 +839,10 @@
   }
   .opacity-0 {
     opacity: 0%;
+  }
+  .shadow-\[4px_4px_6px_rgba\(0\,0\,0\,0\.12\)\] {
+    --tw-shadow: 4px 4px 6px var(--tw-shadow-color, rgba(0,0,0,0.12));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .shadow-\[6px_6px_8px_rgba\(0\,0\,0\,0\.15\)\] {
     --tw-shadow: 6px 6px 8px var(--tw-shadow-color, rgba(0,0,0,0.15));
