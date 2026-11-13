@@ -1,10 +1,9 @@
-
 {% extends "layouts/base.html" %}
 {% load static %}
 
 {% block content %}
 
-<div class="min-h-screen bg-[#f8f9ff] px-6 py-10 md:px-12">
+<div class="min-h-screen px-6 py-10 md:px-12">
 
     <div class="mx-auto max-w-5xl">
 
@@ -20,7 +19,7 @@
 
         <!-- Questionnaire -->
         <div id="questionnaire"
-             class="mt-10 rounded-2xl bg-white p-6 shadow-sm md:p-10">
+            class="mt-5 rounded-2xl bg-white p-6 shadow-sm md:p-10">
 
             <!-- Progress -->
             <div class="flex items-center justify-between gap-3">
@@ -29,7 +28,7 @@
                 </p>
 
                 <p id="question-count"
-                   class="text-sm font-medium text-gray-500">
+                    class="text-sm font-medium text-gray-500">
                     Question 1 of 5
                 </p>
             </div>
@@ -40,17 +39,16 @@
                 <div id="progress-bar"
                     style="height: 8px; width: 20%; background-color: #7777d9; border-radius: 9999px; transition: width 0.3s;">
                 </div>
-
             </div>
 
             <!-- Question Content -->
             <div class="mt-10">
                 <h2 id="question-title"
-                    class="text-xl font-bold text-[#1f1f5c] md:text-2xl">
+                class="text-xl font-bold text-[#1f1f5c] md:text-2xl">
                 </h2>
 
                 <p id="question-description"
-                   class="mt-2 text-sm text-gray-500">
+                class="mt-2 text-sm text-gray-500">
                 </p>
             </div>
 
@@ -58,176 +56,35 @@
             <div id="answer-options" class="mt-6 space-y-3">
             </div>
 
+            <!-- Error Message -->
             <p id="error-message"
-               class="mt-3 hidden text-sm font-medium text-red-500">
+            class="mt-4 hidden text-sm font-medium text-red-500">
                 Please select an answer before continuing.
             </p>
 
             <!-- Navigation -->
-                <div style="display: flex; justify-content: flex-end; gap: 16px; width: 100%;">
+            <div style="display: flex; justify-content: flex-end; gap: 16px; width: 100%; margin-top: 32px;">
 
-                    <button
-                        id="back-button"
-                        type="button"
-                        style="background-color: #DBE3EE; color: #272263;"
-                        class="rounded-lg px-8 py-3 font-semibold hover:opacity-90">
-                        Back
-                    </button>
+                <button
+                    id="back-button"
+                    type="button"
+                    style="background-color: #DBE3EE; color: #272263;"
+                    class="rounded-lg px-8 py-3 font-semibold hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
+                    Back
+                </button>
 
-                    <button
-                        id="next-button"
-                        type="button"
-                        style="background-color: #272263; color: white;"
-                        class="rounded-lg px-8 py-3 font-semibold hover:opacity-90">
-                        Next
-                    </button>
-
-                </div>
+                <button
+                    id="next-button"
+                    type="button"
+                    style="background-color: #272263; color: white;"
+                    class="rounded-lg px-8 py-3 font-semibold hover:opacity-90">
+                    Next
+                </button>
             </div>
+        </div> 
+    </div> 
+</div> 
 
-
-    </div>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    // Questionnaire data
-    const questions = [
-        {
-            title: "1. How have you’ve been lately?",
-            description: "Choose the answer that best describes your current mood.",
-            options: ["Very Good", "Good", "Okay", "Not Good", "Bad"]
-        },
-        {
-            title: "2. How often do you feel mentally and physically exhausted at the same time?",
-            description: "Think about how energetic or tired you feel.",
-            options: ["Never", "Rarely", "Sometimes", "Often", "Always"]
-        },
-        {
-            title: "3. On a scale from 1 to 10, how would you rate your overall stress or tension level over the past week?",
-            description: "Choose the option that best describes your stress level.",
-            options: ["1–3: Low stress (Manageable, occasional worry)", "4–7: Moderate stress (Impacting focus, or daily energy)", "8–10: Severe stress (Overwhelming, significantly disrupting daily functioning)"]
-        },
-        {
-            title: "4. Over the last 2 weeks, how often have you been bothered by feeling nervous, anxious, on edge, or unable to stop worrying?",
-            description: "Think about your sleep quality over the past few days.",
-            options: ["0: Not at all", "1: Several days", "2: More than half the days", "3: Nearly every day"]
-        },
-        {
-            title: "5. How would you describe your overall well-being this week?",
-            description: "It is okay to ask for help whenever you need it.",
-            options: ["Excellent", "Good", "Fair", "Poor", "Very Poor"]
-        }
-    ];
-
-    let currentQuestion = 0;
-    const answers = new Array(questions.length).fill("");
-
-    const questionTitle = document.getElementById("question-title");
-    const questionDescription = document.getElementById("question-description");
-    const answerOptions = document.getElementById("answer-options");
-    const questionCount = document.getElementById("question-count");
-    const progressBar = document.getElementById("progress-bar");
-    const backButton = document.getElementById("back-button");
-    const nextButton = document.getElementById("next-button");
-    const errorMessage = document.getElementById("error-message");
-
-    function renderQuestion() {
-        const question = questions[currentQuestion];
-
-        questionTitle.textContent = question.title;
-        questionDescription.textContent = question.description;
-        questionCount.textContent =
-            `Question ${currentQuestion + 1} of ${questions.length}`;
-
-        const progress =
-            ((currentQuestion + 1) / questions.length) * 100;
-
-        progressBar.style.width = `${progress}%`;
-
-        // Render answer options
-        answerOptions.innerHTML = "";
-
-        question.options.forEach(function (option, index) {
-
-            const label = document.createElement("label");
-
-            label.className =
-                "flex cursor-pointer items-center gap-3 rounded-lx transition " +
-                (answers[currentQuestion] === option
-                    ? "border-[#7777d9] bg-[#f3f3ff]"
-                    : "border-[#e5e5f2] hover:border-[#7777d9] hover:bg-[#f9f9ff]");
-
-            const radio = document.createElement("input");
-
-            radio.type = "radio";
-            radio.name = "answer";
-            radio.value = option;
-            radio.checked = answers[currentQuestion] === option;
-            radio.className = "h-4 w-4 accent-[#7777d9]";
-
-            radio.addEventListener("change", function () {
-                answers[currentQuestion] = option;
-                errorMessage.classList.add("hidden");
-                renderQuestion();
-            });
-
-            const text = document.createElement("span");
-            text.className = "text-sm font-medium text-[#33335f]";
-            text.textContent = option;
-
-            label.appendChild(radio);
-            label.appendChild(text);
-
-            answerOptions.appendChild(label);
-        });
-
-        // Back button state
-        backButton.disabled = currentQuestion === 0;
-
-        // Change Next to Submit on final question
-        nextButton.textContent =
-            currentQuestion === questions.length - 1
-                ? "Submit"
-                : "Next";
-    }
-
-    // Next / Submit
-    nextButton.addEventListener("click", function () {
-
-        if (!answers[currentQuestion]) {
-            errorMessage.classList.remove("hidden");
-            return;
-        }
-
-        errorMessage.classList.add("hidden");
-
-        if (currentQuestion < questions.length - 1) {
-            currentQuestion++;
-            renderQuestion();
-        } else {
-            // Show completion message
-            document.getElementById("questionnaire").classList.add("hidden");
-
-            console.log("Check-in answers:", answers);
-        }
-    });
-
-    // Back
-    backButton.addEventListener("click", function () {
-
-        if (currentQuestion > 0) {
-            currentQuestion--;
-            errorMessage.classList.add("hidden");
-            renderQuestion();
-        }
-    });
-
-    // Initial display
-    renderQuestion();
-
-});
-</script>
+<script src="{% static 'js/student_check_in.js' %}"></script>
 
 {% endblock %}
