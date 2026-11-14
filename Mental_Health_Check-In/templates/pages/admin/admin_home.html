@@ -2,31 +2,32 @@
 {% load static %}
 
 {% block content %}
-<div class="px-12 py-10 max-w-5xl">
+<div class="max-w-6xl px-4 py-6 sm:px-8 lg:px-12 lg:py-10">
 
-  <h1 class="text-3xl font-bold text-[#1f1f5c]">Admin Dashboard</h1>
-  <p class="text-lg text-[#1f1f5c] mt-1">Overview of users, check-ins, and appointments.</p>
+  <h1 class="text-2xl font-bold text-[#1f1f5c] sm:text-3xl">Admin Dashboard</h1>
+  <p class="mt-1 text-base text-[#1f1f5c] sm:text-lg">Overview of users, check-ins, and appointments.</p>
 
-    <div class="mt-8 grid gap-6 sm:grid-cols-3">
-    <a href="{% url 'admin_users' %}" class="rounded-2xl bg-white p-6 shadow-md transition hover:-translate-y-0.5 hover:shadow-lg">
-      <p class="text-base text-[#1f1f5c]">Total Users</p>
+  {# ---------- Stat cards ---------- #}
+  <div class="mt-8 grid gap-6 sm:grid-cols-3">
+    <a href="{% url 'admin_users' %}" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6">
+      <p class="text-sm text-[#1f1f5c]">Total Users</p>
       <p class="mt-2 text-4xl font-bold text-[#1f1f5c]">{{ total_users|default:0 }}</p>
     </a>
-    <a href="{% url 'admin_appointments' %}" class="rounded-2xl bg-white p-6 shadow-md transition hover:-translate-y-0.5 hover:shadow-lg">
-      <p class="text-base text-[#1f1f5c]">Appointments</p>
+    <a href="{% url 'admin_appointments' %}" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6">
+      <p class="text-sm text-[#1f1f5c]">Appointments</p>
       <p class="mt-2 text-4xl font-bold text-[#1f1f5c]">{{ total_appointments|default:0 }}</p>
     </a>
-    <div class="rounded-2xl bg-white p-6 shadow-md">
-      <p class="text-base text-[#1f1f5c]">Check-ins</p>
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+      <p class="text-sm text-[#1f1f5c]">Check-ins</p>
       <p class="mt-2 text-4xl font-bold text-[#1f1f5c]">{{ total_checkins|default:0 }}</p>
     </div>
   </div>
 
   {# ---------- Recent lists ---------- #}
-  <div class="mt-8 grid gap-6 lg:grid-cols-2">
+  <div class="mt-6 grid gap-6 lg:grid-cols-2 lg:items-start">
 
-    <section class="rounded-2xl bg-white p-6 shadow-md">
-      <h2 class="text-xl font-bold text-[#1f1f5c]">Recent Check-ins</h2>
+    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 class="text-lg font-bold text-[#1f1f5c]">Recent Check-ins</h2>
       <div class="mt-4 divide-y divide-gray-100">
         {% for c in recent_checkins %}
           <div class="flex items-center justify-between gap-4 py-3 text-sm text-[#1f1f5c]">
@@ -38,18 +39,18 @@
           <p class="py-6 text-center text-sm text-gray-500">No check-ins yet.</p>
         {% endfor %}
       </div>
-      <a href="{% url 'admin_appointments' %}" class="mt-4 block text-right text-sm text-[#1f1f5c] underline">View All</a>
+      <a href="#" class="mt-4 block text-right text-sm text-[#1f1f5c] underline">View All</a>
     </section>
 
-    <section class="rounded-2xl bg-white p-6 shadow-md">
-      <h2 class="text-xl font-bold text-[#1f1f5c]">Appointments</h2>
+    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 class="text-lg font-bold text-[#1f1f5c]">Appointments</h2>
       <div class="mt-4 divide-y divide-gray-100">
         {% for a in recent_appointments %}
           <div class="flex items-center justify-between gap-4 py-3 text-sm text-[#1f1f5c]">
             <span class="truncate font-medium">{{ a.student.get_full_name|default:a.student.username }}</span>
             <span class="text-gray-500">{{ a.date|date:"m/d/Y" }}</span>
             <span class="rounded-full px-3 py-1 text-xs font-semibold {% if a.status == 'confirmed' %}bg-green-100 text-green-800{% elif a.status == 'cancelled' %}bg-red-100 text-red-700{% elif a.status == 'completed' %}bg-blue-100 text-blue-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
-            {{ a.get_status_display }}
+              {{ a.get_status_display }}
             </span>
           </div>
         {% empty %}
@@ -58,6 +59,7 @@
       </div>
       <a href="{% url 'admin_appointments' %}" class="mt-4 block text-right text-sm text-[#1f1f5c] underline">View All</a>
     </section>
+
   </div>
 </div>
 {% endblock %}

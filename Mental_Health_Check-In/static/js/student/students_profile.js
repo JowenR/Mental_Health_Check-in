@@ -1,17 +1,41 @@
 const form = document.getElementById("profileForm");
 const btn = document.getElementById("editBtn");
-const fields = form.querySelectorAll("input[data-editable]");
-let editing = false;
+const cancelBtn = document.getElementById("cancelBtn");
 
-form.addEventListener("submit", (e) => {
-  if (!editing) {
-    e.preventDefault();
+if (form && btn) {
+  const fields = form.querySelectorAll("input[data-editable]");
+  let editing = false;
+
+  const originalValues = {};
+  fields.forEach((f) => (originalValues[f.name] = f.value));
+
+  function enterEditMode() {
     editing = true;
     fields.forEach((f) => f.removeAttribute("readonly"));
-    fields[0].focus();
+    if (fields[0]) fields[0].focus();
     btn.textContent = "Save Changes";
+    if (cancelBtn) cancelBtn.classList.remove("hidden");
   }
-});
+
+  function exitEditMode() {
+    editing = false;
+    fields.forEach((f) => {
+      f.value = originalValues[f.name];
+      f.setAttribute("readonly", "");
+    });
+    btn.textContent = "Edit Profile";
+    if (cancelBtn) cancelBtn.classList.add("hidden");
+  }
+
+  form.addEventListener("submit", (e) => {
+    if (!editing) {
+      e.preventDefault();
+      enterEditMode();
+    }
+  });
+
+  if (cancelBtn) cancelBtn.addEventListener("click", exitEditMode);
+}
 
 // --- Toast popup ---
 document.querySelectorAll(".toast").forEach((toast) => {
@@ -23,5 +47,7 @@ document.querySelectorAll(".toast").forEach((toast) => {
 
   requestAnimationFrame(show);
   setTimeout(hide, 3000);
-  toast.querySelector(".toast-close").addEventListener("click", hide);
+
+  const closeBtn = toast.querySelector(".toast-close");
+  if (closeBtn) closeBtn.addEventListener("click", hide);
 });
