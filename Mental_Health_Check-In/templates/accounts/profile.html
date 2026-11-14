@@ -2,55 +2,51 @@
 {% load static %}
 
 {% block content %}
-<div class="px-12 py-10 max-w-5xl">
-    <h1 class="text-3xl font-bold text-[#1f1f5c]">My Profile</h1>
+<div class="max-w-5xl px-6 py-10 md:px-12 md:py-10">
+  <h1 class="text-2xl font-bold text-[#1f1f5c] sm:text-3xl">My Profile</h1>
 
-  <div class="mt-[40px]">
-    <h2 class="text-[34px] font-bold leading-[40px] text-[#26205F]">{{ user.first_name|default:user.username }}</h2>
-    <p class="mt-[4px] text-[24px] italic leading-[28px] text-[#26205F]">{% if user.is_staff %}Admin{% else %}Student{% endif %}</p>
+  <div class="mt-6 md:mt-[40px]">
+    <h2 class="break-words text-2xl font-bold leading-tight text-[#26205F] md:text-[34px] md:leading-[40px]">{{ user.first_name|default:user.username }}</h2>
+    <p class="mt-1 text-lg italic text-[#26205F] md:text-[24px] md:leading-[28px]">{% if user.is_staff %}Admin{% else %}Student{% endif %}</p>
   </div>
-
 
   <form method="post" id="profileForm">
     {% csrf_token %}
 
-    <div class="mt-[33px] flex flex-col gap-[40px]">
+    <div class="mt-6 flex flex-col gap-5 md:mt-[33px] md:gap-[40px]">
 
-      <div class="flex items-center">
-        <label class="w-[157px] shrink-0 text-[24px] text-[#26205F]">Name</label>
+      <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-0">
+        <label class="text-lg text-[#26205F] md:w-[157px] md:shrink-0 md:text-[24px]">Name</label>
         <input type="text" name="name" value="{{ user.first_name }}" readonly data-editable
-          class="h-[66px] w-[431px] rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-[30px] text-[24px] italic text-[#26205F] focus:outline-none read-only:caret-transparent read-only:cursor-default [&:not([readonly])]:border-[#2E3892]">
+          class="h-12 w-full rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-5 text-lg italic text-[#26205F] focus:outline-none read-only:cursor-default read-only:caret-transparent [&:not([readonly])]:border-[#2E3892] md:h-[66px] md:max-w-[431px] md:pl-[30px] md:text-[24px]">
       </div>
 
-      <div class="flex items-center">
-        <label class="w-[157px] shrink-0 text-[24px] text-[#26205F]">Email</label>
+      <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-0">
+        <label class="text-lg text-[#26205F] md:w-[157px] md:shrink-0 md:text-[24px]">Email</label>
         <input type="email" name="email" value="{{ user.email }}" readonly data-editable
-          class="h-[66px] w-[431px] rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-[30px] text-[24px] italic text-[#26205F] focus:outline-none read-only:caret-transparent read-only:cursor-default [&:not([readonly])]:border-[#2E3892]">
+          class="h-12 w-full rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-5 text-lg italic text-[#26205F] focus:outline-none read-only:cursor-default read-only:caret-transparent [&:not([readonly])]:border-[#2E3892] md:h-[66px] md:max-w-[431px] md:pl-[30px] md:text-[24px]">
       </div>
 
-      <div class="flex items-center">
-        <label class="w-[157px] shrink-0 text-[24px] text-[#26205F]">{% if user.is_staff %}Admin ID{% else %}Student ID{% endif %}</label>
+      <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-0">
+        <label class="text-lg text-[#26205F] md:w-[157px] md:shrink-0 md:text-[24px]">{% if user.is_staff %}Admin ID{% else %}Student ID{% endif %}</label>
         <input type="text" name="student_id" value="{{ user.username }}" readonly data-editable
-          class="h-[66px] w-[431px] rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-[30px] text-[24px] italic text-[#26205F] focus:outline-none read-only:caret-transparent read-only:cursor-default">
+          class="h-12 w-full rounded-[10px] border-[1.5px] border-[#bdbdbd] bg-white pl-5 text-lg italic text-[#26205F] focus:outline-none read-only:cursor-default read-only:caret-transparent md:h-[66px] md:max-w-[431px] md:pl-[30px] md:text-[24px]">
       </div>
 
     </div>
 
-      <button type="submit" id="editBtn"
-      class="ml-[236px] mt-[41px] h-[62px] w-[286px] rounded-md bg-[#2E3892] text-[20px] font-bold uppercase text-white hover:bg-[#252d78]">
+    <button type="submit" id="editBtn"
+      class="mt-8 h-12 w-full rounded-md bg-[#2E3892] text-base font-bold uppercase text-white hover:bg-[#252d78] sm:w-[286px] md:ml-[236px] md:mt-[41px] md:h-[62px] md:text-[20px]">
       Edit Profile
     </button>
-
-    </div>
   </form>
-
 </div>
 
 {% if messages %}
-<div class="fixed right-6 top-6 z-50 flex flex-col gap-3">
+<div class="fixed left-16 right-4 top-4 z-50 flex flex-col items-end gap-3 sm:left-auto sm:right-6 sm:top-6">
   {% for message in messages %}
   <div role="alert"
-    class="toast flex w-[380px] -translate-y-3 items-center gap-3 rounded-lg border-l-4 bg-white px-5 py-4 opacity-0 shadow-xl transition duration-300 {% if message.tags == 'success' %}border-green-500{% else %}border-red-500{% endif %}">
+    class="toast flex w-full max-w-[380px] -translate-y-3 items-center gap-3 rounded-lg border-l-4 bg-white px-4 py-3 opacity-0 shadow-xl transition duration-300 sm:px-5 sm:py-4 {% if message.tags == 'success' %}border-green-500{% else %}border-red-500{% endif %}">
 
     {% if message.tags == 'success' %}
     <svg class="h-7 w-7 shrink-0 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -62,14 +58,13 @@
     </svg>
     {% endif %}
 
-    <p class="flex-1 text-[16px] font-semibold text-[#26205F]">{{ message }}</p>
+    <p class="flex-1 text-base font-semibold text-[#26205F]">{{ message }}</p>
 
-    <button type="button" class="toast-close text-[24px] leading-none text-gray-400 hover:text-gray-600">&times;</button>
+    <button type="button" class="toast-close text-2xl leading-none text-gray-400 hover:text-gray-600">&times;</button>
   </div>
   {% endfor %}
 </div>
 {% endif %}
-
 
 <script src="{% static 'js/students_profile.js' %}"></script>
 {% endblock %}

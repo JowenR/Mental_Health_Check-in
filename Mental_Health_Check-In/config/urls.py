@@ -21,6 +21,8 @@ from django.contrib.auth.decorators import login_required
 from apps.core.decorators import admin_required, student_required
 from apps.accounts.views import appointments, resources, student_home
 from apps.accounts.views import student_home, check_in
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -31,3 +33,4 @@ urlpatterns = [
     path("admin-panel/", admin_required(TemplateView.as_view(template_name="pages/admin/admin_home.html")), name="admin_home"),
     path("", include("apps.accounts.urls")),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

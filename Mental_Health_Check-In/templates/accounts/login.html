@@ -1,48 +1,42 @@
 {% extends "layouts/auth_base.html" %}
 {% block title %}Log In{% endblock %}
 {% block auth_content %}
-<h2 class="mb-6 text-3xl font-semibold text-ink">Welcome</h2>
-<p class="mt-3 font-form text-sm text-ink">Log in to your account</p>
-
+<h2 class="mb-4 text-2xl font-semibold text-ink md:mb-6 md:text-3xl">Welcome</h2>
+<p class="mt-2 font-form text-sm text-ink md:mt-3">Log in to your account</p>
 {% if form.errors %}
-  <div class="mt-4 rounded-lg border border-red-300 bg-red-50 px-4 py-3 font-form text-sm text-red-700">
-    Invalid email / student ID or password.
-  </div>
+<div class="mt-4 rounded-lg border border-red-300 bg-red-50 px-4 py-3 font-form text-sm text-red-700">
+  Invalid email / student ID or password.
+</div>
 {% endif %}
-
-<form method="post" class="mt-6 space-y-6">
+<form method="post" class="mt-6 space-y-4 md:space-y-6">
   {% csrf_token %}
   <input type="hidden" name="next" value="{{ next }}">
-
   <input
     type="text"
     name="username"
     placeholder="Email or Student ID"
     required
     autofocus
-    class="h-14 w-full rounded-xl border border-ink px-4 font-form text-sm text-ink placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-navy">
-
+    class="h-12 w-full rounded-xl border border-ink px-4 font-form text-sm text-ink placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-navy md:h-14">
   <input
     type="password"
     name="password"
     placeholder="Password"
     required
-    class="h-14 w-full rounded-xl border border-ink px-4 font-form text-sm text-ink placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-navy">
-
+    class="h-12 w-full rounded-xl border border-ink px-4 font-form text-sm text-ink placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-navy md:h-14">
   <button
     type="submit"
-    class="h-10 w-full rounded-lg bg-navy font-form text-sm text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-navy focus:ring-offset-2">
+    class="h-12 w-full rounded-lg bg-navy font-form text-sm text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-navy focus:ring-offset-2 md:h-10">
     Log In
   </button>
 </form>
-
-<div class="mt-8 text-center">
+<div class="mt-6 text-center md:mt-8">
   <a href="{% url 'password_reset' %}" class="border-b border-ink font-form text-sm text-ink hover:opacity-70">
     Forgot Password?
   </a>
 </div>
 
-<div class="mt-20 text-center">
+<div class="mt-10 text-center md:mt-20">
   <p class="font-form text-sm font-bold text-ink">Don't have an account?</p>
   <a href="{% url 'signup' %}" class="mt-3 inline-block border-b border-ink font-form text-sm text-ink hover:opacity-70">
     Sign Up
