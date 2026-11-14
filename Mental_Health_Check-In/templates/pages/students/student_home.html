@@ -1,68 +1,67 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="max-w-6xl px-6 py-10 md:px-12 md:py-12">
+<div class="max-w-6xl px-4 py-6 sm:px-8 lg:px-12 lg:py-10">
 
-    <h1 class="break-words text-3xl font-bold text-[#1f1f5c] sm:text-4xl">
-        Good Day, {{ user.first_name|default:user.username }}!
-    </h1>
+  <h1 class="break-words text-2xl font-bold text-[#1f1f5c] sm:text-3xl">
+    Good Day, {{ user.first_name|default:user.username }}!
+  </h1>
 
-    <p class="mt-2 text-lg text-[#1f1f5c] sm:text-xl">
-        Take a moment to check in with yourself.
-    </p>
+  <p class="mt-1 text-base text-[#1f1f5c] sm:text-lg">
+    Take a moment to check in with yourself.
+  </p>
 
-    <section class="mt-8 rounded-lg border-2 border-gray-200 bg-white p-6 shadow-[6px_6px_8px_rgba(0,0,0,0.15)] sm:p-10">
+  <section class="mt-8 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
 
-        <h2 class="text-lg font-bold text-[#1f1f5c] sm:text-xl">How are you feeling today?</h2>
+    <h2 class="text-lg font-bold text-[#1f1f5c]">How are you feeling today?</h2>
 
-        <div class="mt-8 flex flex-wrap justify-center gap-3 sm:gap-10" id="mood-picker">
-            {% for mood in moods %}
-            <button type="button" data-mood="{{ mood.key }}" style="--c: {{ mood.color }};"
-                class="mood-btn group flex flex-col items-center gap-3 rounded-lg p-1 transition hover:scale-110 hover:bg-[#eef1fb] focus:outline-none sm:p-3">
-                <span class="mood-icon block h-12 w-12 bg-[#1f1f5c] transition-colors duration-200 group-hover:bg-[var(--c)] sm:h-[72px] sm:w-[72px]"
-                    style="-webkit-mask: url('{% static mood.img %}') center/contain no-repeat; mask: url('{% static mood.img %}') center/contain no-repeat;"
-                    role="img" aria-label="{{ mood.label }}"></span>
-                <span class="mood-label text-xs text-[#1f1f5c] group-hover:font-semibold sm:text-sm">{{ mood.label }}</span>
-            </button>
-            {% endfor %}
-        </div>
-
-        <div class="mt-10 flex justify-center">
-            <a href="{% url 'check_in' %}"
-                class="w-full rounded bg-[#2d3a8c] px-6 py-3.5 text-center text-base text-white hover:bg-[#232e70] sm:w-auto sm:px-16">
-                Take Mental Health Check In
-            </a>
-        </div>
-
-    </section>
-
-    <h2 class="mt-12 text-lg font-bold text-[#1f1f5c] sm:text-xl">Quick Actions</h2>
-
-    <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
-
-        <a href="{% url 'check_in' %}"
-            class="rounded-lg border-2 border-gray-200 bg-white p-8 text-center shadow-[6px_6px_8px_rgba(0,0,0,0.15)] transition hover:shadow-[8px_8px_10px_rgba(0,0,0,0.2)]">
-            <img src="{% static 'icons/actions/headphone.svg' %}" alt="" class="mx-auto h-12 w-12">
-            <p class="mt-3 text-lg font-bold text-[#1f1f5c]">Book an Appointment</p>
-            <p class="mt-3 text-sm text-[#1f1f5c] sm:text-[14px]">Choose a time that works best for you, and we'll handle the rest.</p>
-        </a>
-
-        <a href="{% url 'appointments' %}"
-            class="rounded-lg border-2 border-gray-200 bg-white p-8 text-center shadow-[6px_6px_8px_rgba(0,0,0,0.15)] transition hover:shadow-[8px_8px_10px_rgba(0,0,0,0.2)]">
-            <img src="{% static 'icons/actions/history.svg' %}" alt="" class="mx-auto h-12 w-12">
-            <p class="mt-3 text-lg font-bold text-[#1f1f5c]">View My History</p>
-            <p class="mt-3 text-sm text-[#1f1f5c] sm:text-[14px]">Check your past appointments, notes, and activity in one place.</p>
-        </a>
-
-        <a href="{% url 'resources' %}"
-            class="rounded-lg border-2 border-gray-200 bg-white p-8 text-center shadow-[6px_6px_8px_rgba(0,0,0,0.15)] transition hover:shadow-[8px_8px_10px_rgba(0,0,0,0.2)]">
-            <img src="{% static 'icons/actions/files.svg' %}" alt="" class="mx-auto h-12 w-12">
-            <p class="mt-3 text-lg font-bold text-[#1f1f5c]">Helpful Resources</p>
-            <p class="mt-3 text-sm text-[#1f1f5c] sm:text-[14px]">Access guides, FAQs, and useful links to get the support you need.</p>
-        </a>
-
+    <div class="mt-6 flex flex-wrap justify-center gap-3 sm:gap-6" id="mood-picker">
+      {% for mood in moods %}
+      <button type="button" data-mood="{{ mood.key }}" style="--c: {{ mood.color }};"
+        class="mood-btn group flex flex-col items-center gap-3 rounded-lg p-1 transition hover:scale-110 hover:bg-[#eef1fb] focus:outline-none sm:p-3">
+        <span class="mood-icon block h-12 w-12 bg-[#1f1f5c] transition-colors duration-200 group-hover:bg-[var(--c)] sm:h-[72px] sm:w-[72px]"
+          style="-webkit-mask: url('{% static mood.img %}') center/contain no-repeat; mask: url('{% static mood.img %}') center/contain no-repeat;"
+          role="img" aria-label="{{ mood.label }}"></span>
+        <span class="mood-label text-xs text-[#1f1f5c] group-hover:font-semibold sm:text-sm">{{ mood.label }}</span>
+      </button>
+      {% endfor %}
     </div>
 
+    <div class="mt-8 flex justify-center">
+      <a href="{% url 'check_in' %}"
+        class="w-full rounded-xl bg-[#2d3a8c] px-6 py-3 text-center text-base font-semibold text-white transition hover:bg-[#232e70] sm:w-auto sm:px-16">
+        Take Mental Health Check In
+      </a>
+    </div>
+
+  </section>
+
+  <h2 class="mt-10 text-lg font-bold text-[#1f1f5c]">Quick Actions</h2>
+
+  <div class="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+    <a href="{% url 'check_in' %}"
+      class="rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:shadow-md sm:p-6">
+      <img src="{% static 'icons/actions/headphone.svg' %}" alt="" class="mx-auto h-12 w-12">
+      <p class="mt-3 text-lg font-bold text-[#1f1f5c]">Book an Appointment</p>
+      <p class="mt-2 text-sm text-[#1f1f5c]">Choose a time that works best for you, and we'll handle the rest.</p>
+    </a>
+
+    <a href="{% url 'appointments' %}"
+      class="rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:shadow-md sm:p-6">
+      <img src="{% static 'icons/actions/history.svg' %}" alt="" class="mx-auto h-12 w-12">
+      <p class="mt-3 text-lg font-bold text-[#1f1f5c]">View My History</p>
+      <p class="mt-2 text-sm text-[#1f1f5c]">Check your past appointments, notes, and activity in one place.</p>
+    </a>
+
+    <a href="{% url 'resources' %}"
+      class="rounded-2xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:shadow-md sm:p-6">
+      <img src="{% static 'icons/actions/files.svg' %}" alt="" class="mx-auto h-12 w-12">
+      <p class="mt-3 text-lg font-bold text-[#1f1f5c]">Helpful Resources</p>
+      <p class="mt-2 text-sm text-[#1f1f5c]">Access guides, FAQs, and useful links to get the support you need.</p>
+    </a>
+
+  </div>
 </div>
 <script src="{% static 'js/student/student_home.js' %}"></script>
 {% endblock %}
