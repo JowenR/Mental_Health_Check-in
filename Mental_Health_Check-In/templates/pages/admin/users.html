@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="px-12 py-10 max-w-5xl">
+
+  <h1 class="text-3xl font-bold text-[#1f1f5c]">User List</h1>
+  <p class="text-lg text-[#1f1f5c] mt-1">Select a student to view their details.</p>
+
+  {# ---------- Table ---------- #}
+  <section class="mt-8 rounded-2xl bg-white p-6 shadow-md">
+    <div class="max-h-80 overflow-auto">
+      <table class="w-full min-w-[34rem] text-left text-[#1f1f5c]">
+        <thead class="sticky top-0 bg-white">
+          <tr class="border-b border-gray-200 text-base">
+            <th class="py-3 pl-12 pr-4 font-bold">Names</th>
+            <th class="py-3 pr-4 font-bold">Email</th>
+            <th class="py-3 pr-4 font-bold">Student ID</th>
+            <th class="py-3 pr-4 font-bold">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in students %}
+          <tr data-user-row data-user-id="{{ u.pk }}" class="cursor-pointer text-sm transition hover:bg-[#1f1f5c]/5 data-[selected=true]:bg-[#1f1f5c]/10">
+            <td class="py-3 pl-2 pr-4">
+              <div class="flex items-center gap-3">
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1f1f5c] text-xs font-bold text-white">
+                  {{ u.get_full_name|default:u.username|slice:":1"|upper }}
+                </span>
+                <span class="font-medium">{{ u.get_full_name|default:u.username }}</span>
+              </div>
+            </td>
+            <td class="py-3 pr-4 text-gray-600">{{ u.email|default:"-" }}</td>
+            <td class="py-3 pr-4 text-gray-600">{{ u.username }}</td>
+            <td class="py-3 pr-4 font-semibold underline">View Details</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="py-8 text-center text-sm text-gray-500">No students yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {# ---------- Student details ---------- #}
+  <h2 class="mt-8 text-xl font-bold text-[#1f1f5c]">Student Details</h2>
+
+  <section class="mt-3 rounded-2xl bg-white p-6 shadow-md">
+    <p id="details-placeholder" class="py-10 text-center text-sm text-gray-500">
+      Click a student above to see their details.
+    </p>
+
+    {% for u in students %}
+    <div data-user-panel data-user-id="{{ u.pk }}" class="hidden">
+      <div class="space-y-1 text-[#1f1f5c]">
+        <p><span class="font-bold">Name:</span> {{ u.get_full_name|default:u.username }}</p>
+        <p><span class="font-bold">Student ID:</span> {{ u.username }}</p>
+        <p><span class="font-bold">Email:</span> {{ u.email|default:"-" }}</p>
+      </div>
+
+      <div class="mt-4 flex gap-3 border-b border-gray-200 pb-4">
+        <button type="button" data-tab="checkins" class="rounded-lg border-2 border-transparent bg-[#1f1f5c]/10 px-6 py-2 font-semibold text-[#1f1f5c] transition data-[active=true]:border-[#1f1f5c] data-[active=true]:bg-white">
+          Check-ins
+        </button>
+        <button type="button" data-tab="appointments" data-active="true" class="rounded-lg border-2 border-transparent bg-[#1f1f5c]/10 px-6 py-2 font-semibold text-[#1f1f5c] transition data-[active=true]:border-[#1f1f5c] data-[active=true]:bg-white">
+          Appointments
+        </button>
+      </div>
+
+      {# Check-ins tab #}
+      <div data-tab-content="checkins" class="hidden mt-4">
+        <p class="font-medium text-[#1f1f5c]">Recent Check-ins</p>
+        <p class="py-6 text-center text-sm text-gray-500">No check-in data connected yet.</p>
+      </div>
+
+      {# Appointments tab #}
+      <div data-tab-content="appointments" class="mt-4">
+        <p class="font-medium text-[#1f1f5c]">Recent Appointments</p>
+        <div class="mt-2 max-h-48 divide-y divide-gray-100 overflow-auto">
+          {% for a in u.appointments.all|dictsortreversed:"date" %}
+          <div class="flex items-center justify-between gap-4 py-2.5 text-sm text-[#1f1f5c]">
+            <span class="min-w-0 flex-1 truncate">{{ a.counselor.get_full_name|default:a.counselor.username }}</span>
+            <span class="text-gray-600">{{ a.date|date:"m/d/Y" }} {{ a.time|time:"g:i A" }}</span>
+            <span class="rounded-full px-3 py-1 text-xs font-semibold {% if a.status == 'confirmed' %}bg-green-100 text-green-800{% elif a.status == 'cancelled' %}bg-red-100 text-red-700{% elif a.status == 'completed' %}bg-blue-100 text-blue-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+              {{ a.get_status_display }}
+            </span>
+          </div>
+          {% empty %}
+          <p class="py-6 text-center text-sm text-gray-500">No appointments yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+</div>
+
+<script src="{% static 'js/admin/admin_users.js' %}"></script>
+{% endblock %}

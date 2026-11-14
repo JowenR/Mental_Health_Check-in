@@ -74,3 +74,73 @@ def cancel_appointment(request, pk):
         messages.success(request, "Your appointment has been cancelled.")
 
     return redirect("appointments")
+
+@login_required
+def admin_appointments(request):
+    tab = request.GET.get("tab", "all")
+    S = Appointment.Status
+
+    tabs = {
+        "all": [S.PENDING, S.CONFIRMED, S.COMPLETED, S.CANCELLED],
+        "upcoming": [S.PENDING, S.CONFIRMED],
+        "completed": [S.COMPLETED],
+        "cancelled": [S.CANCELLED],
+    }
+    if tab not in tabs:
+        tab = "all"
+
+    base = Appointment.objects.select_related("student", "counselor")
+    appointments_list = base.filter(status__in=tabs[tab])
+    if tab != "upcoming":
+        appointments_list = appointments_list.order_by("-date", "-time")
+
+    counts = {name: base.filter(status__in=st).count() for name, st in tabs.items()}
+
+    return render(request, "pages/admin/appointments.html", {
+        "appointments": appointments_list,
+        "tab": tab,
+        "counts": counts,
+    })
+
+@login_required
+@require_POST
+def admin_update_status(request, pk):
+    appointment = get_object_or_404(Appointment, pk=pk)
+    S = Appointment.Status
+
+    # action -> (allowed current statuses, new status, success message)
+    actions = {
+        "confirm": ([S.PENDING], S.CONFIRMED, "Appointment confirmed."),
+        "complete": ([S.CONFIRMED], S.COMPLETED, "Appointment marked as completed."),
+        "cancel": ([S.PENDING, S.CONFIRMED], S.CANCELLED, "Appointment cancelled."),
+        "undo_confirm": ([S.CONFIRMED], S.PENDING, "Confirmation undone. Appointment is Pending again."),
+        "undo_complete": ([S.COMPLETED], S.CONFIRMED, "Completion undone. Appointment is Confirmed again."),
+    }
+    action = actions.get(request.POST.get("action"))
+
+    if action and appointment.status in action[0]:
+        appointment.status = action[1]
+        appointment.save(update_fields=["status"])
+        messages.success(request, action[2])
+    else:
+        messages.error(request, "That action isn't allowed for this appointment.")
+
+    return redirect(f"{request.path.rsplit('/', 3)[0]}/?tab={request.POST.get('tab', 'upcoming')}")
+
+@login_required
+def admin_home(request):
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+
+    recent_appointments = (
+        Appointment.objects.select_related("student", "counselor")
+        .order_by("-created_at")[:8]
+    )
+
+    return render(request, "pages/admin/admin_home.html", {
+        "total_users": User.objects.filter(is_staff=False).count(),
+        "total_appointments": Appointment.objects.count(),
+        "total_checkins": 0,          # TODO: connect to the check-in model
+        "recent_appointments": recent_appointments,
+        "recent_checkins": [],        # TODO: connect to the check-in model
+    })

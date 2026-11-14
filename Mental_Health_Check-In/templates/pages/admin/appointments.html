@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="px-12 py-10 max-w-5xl">
+
+  <h1 class="text-3xl font-bold text-[#1f1f5c]">Appointments</h1>
+  <p class="text-lg text-[#1f1f5c] mt-1">Review, confirm, and manage student appointments.</p>
+
+  {# ---------- Alerts ---------- #}
+  {% for message in messages %}
+    <div role="alert"
+         class="mt-6 flex items-start gap-4 rounded-2xl border border-l-8 bg-white p-4 shadow-lg {% if message.tags == 'error' %}border-red-200 border-l-red-500{% else %}border-green-200 border-l-green-500{% endif %}">
+      <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full {% if message.tags == 'error' %}bg-red-100 text-red-600{% else %}bg-green-100 text-green-600{% endif %}">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          {% if message.tags == 'error' %}<path d="M6 6l12 12M18 6L6 18"/>{% else %}<path d="M5 13l4 4L19 7"/>{% endif %}
+        </svg>
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="font-bold text-[#1f1f5c]">{% if message.tags == 'error' %}Something went wrong{% else %}Success!{% endif %}</p>
+        <p class="text-sm text-gray-600">{{ message }}</p>
+      </div>
+    </div>
+  {% endfor %}
+
+    {# ---------- Tabs ---------- #}
+  <div class="mt-8 flex flex-wrap gap-3">
+    <a href="?tab=all"
+       class="rounded-lg border-2 px-6 py-2 font-semibold transition {% if tab == 'all' %}border-[#1f1f5c] bg-white text-[#1f1f5c]{% else %}border-transparent bg-[#1f1f5c]/10 text-[#1f1f5c] hover:bg-[#1f1f5c]/20{% endif %}">
+      All <span class="ml-1 text-sm opacity-70">({{ counts.all }})</span>
+    </a>
+    <a href="?tab=upcoming"
+       class="rounded-lg border-2 px-6 py-2 font-semibold transition {% if tab == 'upcoming' %}border-[#1f1f5c] bg-white text-[#1f1f5c]{% else %}border-transparent bg-[#1f1f5c]/10 text-[#1f1f5c] hover:bg-[#1f1f5c]/20{% endif %}">
+      Upcoming <span class="ml-1 text-sm opacity-70">({{ counts.upcoming }})</span>
+    </a>
+    <a href="?tab=completed"
+       class="rounded-lg border-2 px-6 py-2 font-semibold transition {% if tab == 'completed' %}border-[#1f1f5c] bg-white text-[#1f1f5c]{% else %}border-transparent bg-[#1f1f5c]/10 text-[#1f1f5c] hover:bg-[#1f1f5c]/20{% endif %}">
+      Completed <span class="ml-1 text-sm opacity-70">({{ counts.completed }})</span>
+    </a>
+    <a href="?tab=cancelled"
+       class="rounded-lg border-2 px-6 py-2 font-semibold transition {% if tab == 'cancelled' %}border-[#1f1f5c] bg-white text-[#1f1f5c]{% else %}border-transparent bg-[#1f1f5c]/10 text-[#1f1f5c] hover:bg-[#1f1f5c]/20{% endif %}">
+      Cancelled <span class="ml-1 text-sm opacity-70">({{ counts.cancelled }})</span>
+    </a>
+  </div>
+
+  {# ---------- Table ---------- #}
+  <section class="mt-4 rounded-2xl bg-white p-6 shadow-md">
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[44rem] text-left text-[#1f1f5c]">
+        <thead>
+          <tr class="border-b border-gray-200 text-sm">
+            <th class="py-3 pr-4 font-bold">Student</th>
+            <th class="py-3 pr-4 font-bold">Counselor</th>
+            <th class="py-3 pr-4 font-bold">Date</th>
+            <th class="py-3 pr-4 font-bold">Time</th>
+            <th class="py-3 pr-4 font-bold">Status</th>
+            <th class="py-3 text-right font-bold">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-sm">
+          {% for a in appointments %}
+          <tr>
+            <td class="py-3 pr-4">
+              <div class="flex items-center gap-3">
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1f1f5c] text-xs font-bold text-white">
+                  {{ a.student.get_full_name|default:a.student.username|slice:":1"|upper }}
+                </span>
+                <div class="min-w-0">
+                  <p class="truncate font-medium">{{ a.student.get_full_name|default:a.student.username }}</p>
+                  {% if a.notes %}<p class="max-w-[12rem] truncate text-xs text-gray-500" title="{{ a.notes }}">{{ a.notes }}</p>{% endif %}
+                </div>
+              </div>
+            </td>
+            <td class="py-3 pr-4">{{ a.counselor.get_full_name|default:a.counselor.username }}</td>
+            <td class="py-3 pr-4 text-gray-600">{{ a.date|date:"m/d/Y" }}</td>
+            <td class="py-3 pr-4 text-gray-600">{{ a.time|time:"g:i A" }}</td>
+            <td class="py-3 pr-4">
+              <span class="rounded-full px-3 py-1 text-xs font-semibold {% if a.status == 'confirmed' %}bg-green-100 text-green-800{% elif a.status == 'cancelled' %}bg-red-100 text-red-700{% elif a.status == 'completed' %}bg-blue-100 text-blue-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                {{ a.get_status_display }}
+              </span>
+            </td>
+
+            {# ---------- Actions ---------- #}
+            <td class="py-3 text-right">
+              {% if a.status != 'cancelled' %}
+              <form method="post" action="{% url 'admin_appointment_status' a.pk %}" class="inline-flex flex-wrap justify-end gap-2">
+                {% csrf_token %}
+                <input type="hidden" name="tab" value="{{ tab }}">
+
+                {% if a.status == 'pending' %}
+                  <button type="submit" name="action" value="confirm"
+                          class="rounded-lg bg-[#1f1f5c] px-3 py-1.5 text-xs font-semibold text-white transition hover:opacity-90">
+                    Confirm
+                  </button>
+
+                {% elif a.status == 'confirmed' %}
+                  <button type="submit" name="action" value="complete"
+                          class="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-green-700">
+                    Mark completed
+                  </button>
+                  <button type="submit" name="action" value="undo_confirm" data-confirm="Undo the confirmation and set it back to Pending?"
+                          class="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-50">
+                    Undo confirm
+                  </button>
+
+                {% elif a.status == 'completed' %}
+                  <button type="submit" name="action" value="undo_complete" data-confirm="Undo completion and set it back to Confirmed?"
+                          class="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-50">
+                    Undo completed
+                  </button>
+                {% endif %}
+
+                {% if a.status == 'pending' or a.status == 'confirmed' %}
+                  <button type="submit" name="action" value="cancel" data-confirm="Cancel this appointment?"
+                          class="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50">
+                    Cancel
+                  </button>
+                {% endif %}
+              </form>
+              {% else %}
+                <span class="text-gray-400">-</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="py-10 text-center text-gray-500">No {{ tab }} appointments.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script src="{% static 'js/admin/admin_appointments.js' %}"></script>
+{% endblock %}

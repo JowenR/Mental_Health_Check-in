@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from apps.core.decorators import admin_required, student_required
-from apps.accounts.views import student_home, check_in, resources
+from apps.accounts.views import student_home, check_in, resources, admin_users
 from django.conf import settings
 from django.conf.urls.static import static
 from appointments import views as appointment_views
@@ -30,10 +30,16 @@ urlpatterns = [
     path("check-in/", student_required(check_in), name="check_in"),
     path("appointments/", student_required(appointment_views.appointments), name="appointments"),
     path("appointments/slots/", student_required(appointment_views.available_slots), name="appointment_slots"),
-    path("resources/", student_required(resources), name="resources"),
-    path("admin-panel/", admin_required(TemplateView.as_view(template_name="pages/admin/admin_home.html")), name="admin_home"),
-    path("", include("apps.accounts.urls")),
     path("appointments/<int:pk>/cancel/", student_required(appointment_views.cancel_appointment), name="cancel_appointment"),
+    path("resources/", student_required(resources), name="resources"),
+
+    # ----- Admin -----
+    path("admin-panel/", admin_required(appointment_views.admin_home), name="admin_home"),
+    path("admin-panel/users/", admin_required(admin_users), name="admin_users"),
+    path("admin-panel/appointments/", admin_required(appointment_views.admin_appointments), name="admin_appointments"),
+    path("admin-panel/appointments/<int:pk>/status/", admin_required(appointment_views.admin_update_status), name="admin_appointment_status"),
+
+    path("", include("apps.accounts.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

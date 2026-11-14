@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .forms import LoginForm, SignUpForm
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+
+
 class RoleLoginView(auth_views.LoginView):
     template_name = "accounts/login.html"
     authentication_form = LoginForm
@@ -83,3 +86,12 @@ def appointments(request):
 
 def resources(request):
     return render(request, "pages/students/resources.html")
+
+def admin_users(request):
+    User = get_user_model()
+    students = (
+        User.objects.filter(is_staff=False)
+        .order_by("first_name", "last_name", "username")
+        .prefetch_related("appointments__counselor")
+    )
+    return render(request, "pages/admin/users.html", {"students": students})
