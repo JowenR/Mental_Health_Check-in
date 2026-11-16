@@ -39,6 +39,25 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentQuestion = 0;
     const answers = new Array(questions.length).fill("");
 
+    // Each question is scored 0 (best) to 4 (worst), so the max total is 20.
+    // Questions with 3 or 4 options (Q3, Q4) are scaled to the same 0-4 range.
+    const MAX_POINTS_PER_QUESTION = 4;
+
+    function calculateScore() {
+        let total = 0;
+
+        questions.forEach(function (question, i) {
+            const index = question.options.indexOf(answers[i]);
+            const steps = question.options.length - 1;
+            total += (index / steps) * MAX_POINTS_PER_QUESTION;
+        });
+
+        return {
+            score: Math.round(total),
+            maxScore: questions.length * MAX_POINTS_PER_QUESTION
+        };
+    }
+
     const questionTitle = document.getElementById("question-title");
     const questionDescription = document.getElementById("question-description");
     const answerOptions = document.getElementById("answer-options");
@@ -108,10 +127,10 @@ document.addEventListener("DOMContentLoaded", function () {
             answerOptions.appendChild(label);
         });
 
-        
+
         backButton.disabled = currentQuestion === 0;
 
-        
+
         nextButton.textContent =
             currentQuestion === questions.length - 1 ? "Submit" : "Next";
     }
@@ -130,8 +149,9 @@ document.addEventListener("DOMContentLoaded", function () {
             currentQuestion++;
             renderQuestion();
         } else {
-            document.getElementById("questionnaire").classList.add("hidden");
-            console.log("Check-in answers:", answers);
+            const result = calculateScore();
+            console.log("Check-in answers:", answers, result);
+            showCheckInResults(result.score, result.maxScore);
         }
     });
 

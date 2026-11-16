@@ -3,7 +3,9 @@
 {% block content %}
 
 <div class="max-w-6xl px-4 py-6 sm:px-8 lg:px-12 lg:py-10">
-    <div>
+
+    <!-- ===================== QUESTIONNAIRE ===================== -->
+    <div id="questionnaire-section">
         <h1 class="break-words text-2xl font-bold text-[#1f1f5c] sm:text-3xl">
             Mental Health Check-In
         </h1>
@@ -70,6 +72,175 @@
             </div>
         </div>
     </div>
+
+    <!-- ===================== CHECK-IN RESULTS ===================== -->
+    <!-- Hidden until the questionnaire is submitted -->
+    <div id="results-section" class="hidden">
+        <h1 class="break-words text-2xl font-bold text-[#1f1f5c] sm:text-3xl">
+            Your Check-in Results
+        </h1>
+        <p class="mt-2 text-sm text-[#1f1f5c]">
+            Date: {% now "F j, Y" %}
+        </p>
+
+        <!-- Overall result card -->
+        <div class="mt-6 max-w-2xl rounded-xl border border-gray-300 bg-white p-5 shadow-md sm:p-6">
+            <div class="flex flex-col items-center gap-5 sm:flex-row sm:items-center">
+                <div id="result-icon" class="shrink-0"></div>
+
+                <div class="text-center sm:text-left">
+                    <h2 class="text-base font-bold text-[#1f1f5c]">Your overall mental health</h2>
+                    <p id="result-level" class="text-base text-[#1f1f5c]"></p>
+                    <p id="result-description" class="mt-3 text-xs italic leading-relaxed text-[#272263]"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key points -->
+        <div class="mt-8 max-w-2xl">
+            <h3 class="text-base font-bold text-[#1f1f5c]">Key Points</h3>
+            <ul id="result-key-points" class="mt-3 space-y-3"></ul>
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-10 flex max-w-2xl justify-end">
+            <!-- Replace "#" with your resources page URL, e.g. {% url 'resources' %} -->
+            <a id="view-resources-button"
+               href="#"
+               style="background-color: #272263; color: white;"
+               class="rounded-lg px-6 py-3 text-sm font-semibold hover:opacity-90">
+                View Resources
+            </a>
+        </div>
+    </div>
 </div>
+
 <script src="{% static 'js/student/student_check_in.js' %}"></script>
+
+<script>
+    /*
+     * Results logic.
+     * Call:  window.showCheckInResults(totalScore, maxScore)
+     * or dispatch:
+     *   document.dispatchEvent(new CustomEvent('checkin:submitted',
+     *       { detail: { score: totalScore, maxScore: maxScore } }));
+     * Higher score = more distress. (If your scale is reversed, flip it before calling.)
+     */
+    (function () {
+        const checkIcon =
+            '<svg class="mt-0.5 h-4 w-4 shrink-0 text-[#272263]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>';
+
+        // SVG faces (96x96)
+        const face = (color, features) =>
+            `<svg width="80" height="80" viewBox="0 0 96 96" aria-hidden="true">
+                <circle cx="48" cy="48" r="44" fill="${color}"/>${features}</svg>`;
+
+        const eyes = (fill = '#fff') =>
+            `<circle cx="34" cy="38" r="6" fill="${fill}"/><circle cx="62" cy="38" r="6" fill="${fill}"/>`;
+
+        const FACES = {
+            normal: face('#6FCF6F',
+                eyes() + '<path d="M26 54 Q48 82 70 54 Z" fill="#fff"/>'),
+            mild: face('#3B82F6',
+                eyes() + '<path d="M26 54 Q48 82 70 54 Z" fill="#fff"/>'),
+            moderate: face('#E8D82A',
+                eyes('#fff') + '<ellipse cx="48" cy="64" rx="8" ry="11" fill="#fff"/>'),
+            moderatelySevere: face('#F97316',
+                eyes('#fff') + '<rect x="38" y="62" width="20" height="6" rx="2" fill="#fff"/>'),
+            severe: face('#EF0000',
+                '<path d="M24 32 L42 40" stroke="#fff" stroke-width="5" stroke-linecap="round"/>' +
+                '<path d="M72 32 L54 40" stroke="#fff" stroke-width="5" stroke-linecap="round"/>' +
+                '<circle cx="34" cy="46" r="5" fill="#fff"/><circle cx="62" cy="46" r="5" fill="#fff"/>' +
+                '<path d="M28 74 Q48 54 68 74 Z" fill="#fff"/>')
+        };
+
+        const RESULTS = {
+            normal: {
+                level: 'Normal / Optimal Well-being',
+                description: 'Indicates a healthy, balanced state of mental well-being. You are coping well with daily pressures, experiencing stable moods, and maintaining a positive outlook on life.',
+                points: [
+                    'Stable emotional regulation and high resilience.',
+                    'Consistent sleep patterns and healthy energy levels.',
+                    'Feeling overall content, productive, and socially connected.'
+                ]
+            },
+            mild: {
+                level: 'Mild / Low Stress',
+                description: 'Reflects minor everyday pressures or occasional worries. While functioning remains strong, you may experience brief moments of fatigue or slight tension that can easily be managed with standard self-care.',
+                points: [
+                    'Occasional, manageable stress triggers.',
+                    'Sleep or rest quality could be slightly optimized.',
+                    'Doing well overall with strong foundational coping habits.'
+                ]
+            },
+            moderate: {
+                level: 'Moderate Stress',
+                description: 'Represents a noticeable elevation in stress or emotional strain. Daily responsibilities, work, or academics are starting to impact your mental bandwidth, requiring intentional breaks and boundary-setting.',
+                points: [
+                    'Moderate feelings of being overwhelmed or pressured.',
+                    'Noticeable shifts in concentration, focus, or routine.',
+                    'Benefit from taking breaks, talking to support systems, and having rest.'
+                ]
+            },
+            moderatelySevere: {
+                level: 'Moderately Severe',
+                description: 'Points to persistent emotional exhaustion, frequent anxiety, or lingering low moods. This level indicates that stress or low energy is regularly interfering with motivation, enjoyment, and daily functioning.',
+                points: [
+                    'Frequent feelings of burnout, fatigue, or emotional numbness.',
+                    'Disruption in sleep quality, appetite, or daily routines.',
+                    'Recommendation to actively lean on a support network and consider professional guidance or counseling.'
+                ]
+            },
+            severe: {
+                level: 'Severe Distress',
+                description: 'Signifies high levels of psychological distress, severe anxiety, or depressive symptoms. Daily functioning is heavily impacted, and managing these feelings independently has become overwhelming.',
+                points: [
+                    'Intense, overwhelming feelings of sadness, anxiety, or hopelessness.',
+                    'Significant interference with work, studies, relationships, or self-care.',
+                    'Strongly recommended to reach out to a mental health professional, counselor, or trusted healthcare provider for specialized support.'
+                ]
+            }
+        };
+
+        function getCategory(score, maxScore) {
+            const pct = maxScore > 0 ? score / maxScore : 0;
+            if (pct <= 0.20) return 'normal';
+            if (pct <= 0.40) return 'mild';
+            if (pct <= 0.60) return 'moderate';
+            if (pct <= 0.80) return 'moderatelySevere';
+            return 'severe';
+        }
+
+        function showCheckInResults(score, maxScore) {
+            const key = getCategory(Number(score), Number(maxScore));
+            const data = RESULTS[key];
+
+            document.getElementById('result-icon').innerHTML = FACES[key];
+            document.getElementById('result-level').textContent = data.level;
+            document.getElementById('result-description').textContent = data.description;
+
+            const list = document.getElementById('result-key-points');
+            list.innerHTML = '';
+            data.points.forEach(text => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start gap-3 text-xs text-[#272263]';
+                li.innerHTML = checkIcon;
+                const span = document.createElement('span');
+                span.textContent = text;
+                li.appendChild(span);
+                list.appendChild(li);
+            });
+
+            document.getElementById('questionnaire-section').classList.add('hidden');
+            document.getElementById('results-section').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.showCheckInResults = showCheckInResults;
+
+        document.addEventListener('checkin:submitted', function (e) {
+            showCheckInResults(e.detail.score, e.detail.maxScore);
+        });
+    })();
+</script>
 {% endblock %}
