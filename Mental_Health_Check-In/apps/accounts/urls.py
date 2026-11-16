@@ -23,4 +23,5 @@ urlpatterns = [
     ), name="password_reset_complete"),
     path("profile/", views.profile, name="profile"),
     path("password/change/", views.ChangePasswordView.as_view(), name="password_change"),
+    path("student/resources/", views.student_resources, name="student_resources"),
 ]
