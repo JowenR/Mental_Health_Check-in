@@ -155,3 +155,6 @@ def admin_users(request):
         .prefetch_related("appointments__counselor")
     )
     return render(request, "pages/admin/users.html", {"students": students})
+
+def student_resources(request):
+    return render(request, "pages/students/resources.html")
